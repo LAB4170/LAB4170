@@ -3,13 +3,13 @@
   <rect x="0.5" y="0.5" width="429" height="289" rx="13.5" fill="none" stroke="#1E2A44"/>
   <text x="28" y="40" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="11.5" font-weight="600" fill="#4F8EF7" letter-spacing="2">LANGUAGE DISTRIBUTION</text>
   <clipPath id="c"><rect x="28" y="62" width="374" height="10" rx="5"/></clipPath>
-  <g clip-path="url(#c)"><rect x="28.0" y="62" width="109.7" height="10" fill="#4F8EF7"/><rect x="137.7" y="62" width="107.6" height="10" fill="#6C9FF5"/><rect x="245.4" y="62" width="86.8" height="10" fill="#8AB1F3"/><rect x="332.1" y="62" width="31.4" height="10" fill="#A6C3F1"/><rect x="363.5" y="62" width="27.0" height="10" fill="#C0D4EF"/><rect x="390.5" y="62" width="3.6" height="10" fill="#D8E3EE"/></g>
+  <g clip-path="url(#c)"><rect x="28.0" y="62" width="109.6" height="10" fill="#4F8EF7"/><rect x="137.6" y="62" width="107.5" height="10" fill="#6C9FF5"/><rect x="245.1" y="62" width="86.7" height="10" fill="#8AB1F3"/><rect x="331.8" y="62" width="31.3" height="10" fill="#A6C3F1"/><rect x="363.1" y="62" width="27.0" height="10" fill="#C0D4EF"/><rect x="390.1" y="62" width="4.1" height="10" fill="#D8E3EE"/></g>
   <circle cx="33" cy="108" r="5" fill="#4F8EF7"/>
   <text x="46" y="112" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" fill="#F1F5F9">JavaScript</text>
   <text x="46" y="129" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12" fill="#94A3B8">29.3%</text>
   <circle cx="233" cy="108" r="5" fill="#6C9FF5"/>
   <text x="246" y="112" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" fill="#F1F5F9">TypeScript</text>
-  <text x="246" y="129" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12" fill="#94A3B8">28.8%</text>
+  <text x="246" y="129" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12" fill="#94A3B8">28.7%</text>
   <circle cx="33" cy="152" r="5" fill="#8AB1F3"/>
   <text x="46" y="156" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" fill="#F1F5F9">Java</text>
   <text x="46" y="173" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12" fill="#94A3B8">23.2%</text>
@@ -21,6 +21,6 @@
   <text x="46" y="217" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12" fill="#94A3B8">7.2%</text>
   <circle cx="233" cy="196" r="5" fill="#D8E3EE"/>
   <text x="246" y="200" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" fill="#F1F5F9">Python</text>
-  <text x="246" y="217" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12" fill="#94A3B8">1.0%</text>
+  <text x="246" y="217" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12" fill="#94A3B8">1.1%</text>
   <text x="28" y="272" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="11" fill="#64748B">Public repositories and public activity only</text>
 </svg>
