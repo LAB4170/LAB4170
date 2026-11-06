@@ -1,0 +1,49 @@
+name: Profile metrics
+
+# Regenerates the statistics cards in assets/generated/ from live public GitHub
+# data. Commits only when the figures actually change.
+on:
+  schedule:
+    - cron: "17 3 * * *" # daily, 03:17 UTC
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/generate_metrics.py"
+      - ".github/workflows/profile-metrics.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-metrics
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Refresh statistics assets
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate statistics cards
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/generate_metrics.py
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- assets/generated; then
+            echo "No change in metrics; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/generated
+          git commit -m "chore: refresh profile metrics"
+          git push

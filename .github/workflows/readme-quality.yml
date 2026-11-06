@@ -1,0 +1,59 @@
+name: README quality
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "README.md"
+      - "assets/**"
+      - "scripts/check_readme.py"
+      - ".github/workflows/readme-quality.yml"
+  pull_request:
+    paths:
+      - "README.md"
+      - "assets/**"
+  schedule:
+    - cron: "41 5 * * 1" # weekly external link check, Monday 05:41 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  markdown:
+    name: Markdown, internal links and style
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v19
+        with:
+          globs: README.md
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check relative links, alt text and no-emoji rule
+        run: python scripts/check_readme.py
+
+  external-links:
+    name: External links
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check external links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress --max-retries 2 --timeout 20
+            --accept 200,204,301,302,429
+            --exclude 'streak-stats.demolab.com'
+            --exclude 'github-readme-activity-graph.vercel.app'
+            README.md
+          fail: true
