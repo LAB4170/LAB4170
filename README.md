@@ -147,13 +147,15 @@ Areas I am concentrating on:
 - Workflow automation and dependable third-party integrations, including payments.
 - Stronger testing and delivery pipelines for the products I maintain.
 
-Client and private project work is not described here.
+Client and private project work is not described here. The card below lists the most recent commit in each public repository and updates itself daily.
+
+<img src="assets/generated/latest.svg" alt="Latest commit in each of the most recently active public repositories of LAB4170." width="100%">
 
 <br>
 
 ## GitHub statistics
 
-Live figures from public GitHub data, refreshed daily by a workflow. Nothing here is typed in by hand.
+Live figures from public GitHub data, refreshed daily by workflows. Nothing here is typed in by hand.
 
 <table>
   <tr>
@@ -169,9 +171,14 @@ Live figures from public GitHub data, refreshed daily by a workflow. Nothing her
       <img src="assets/generated/activity.svg" alt="Weekly contribution activity for LAB4170 over the last 12 months, with current streak, longest streak and active days." width="100%">
     </td>
   </tr>
+  <tr>
+    <td colspan="2" valign="top">
+      <img src="assets/generated/snake.svg" alt="Animated snake travelling across the LAB4170 contribution calendar." width="100%">
+    </td>
+  </tr>
 </table>
 
-<sub>All cards are generated inside this repository from the GitHub API by a scheduled workflow, so they have no third-party dependency. They reflect public activity only.</sub>
+<sub>All cards are generated inside this repository from the GitHub API by a scheduled workflow, so they have no third-party dependency. They reflect public activity only. Animations pause for visitors who have reduced motion enabled.</sub>
 
 <br>
 

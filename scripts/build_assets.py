@@ -33,6 +33,11 @@ STATUS_COLOURS = {
 }
 
 
+PHRASES = ["Building business systems", "Automating workflows", "Shipping full-stack products"]
+CHAR_W = 10.8  # advance of the 18px monospace line; textLength below pins it across fonts
+CYCLE = 15  # seconds for the full rotation (5s per phrase)
+
+
 def banner() -> str:
     grid = "".join(
         f'<line x1="{x}" y1="0" x2="{x}" y2="300" stroke="{BORDER}" stroke-opacity="0.55"/>'
@@ -41,31 +46,58 @@ def banner() -> str:
         f'<line x1="720" y1="{y}" x2="1200" y2="{y}" stroke="{BORDER}" stroke-opacity="0.55"/>'
         for y in range(0, 300, 60)
     )
+    css, typed = [], []
+    for i, text in enumerate(PHRASES):
+        w = round(len(text) * CHAR_W, 1)
+        delay = i * CYCLE / len(PHRASES)
+        # type in (0-8%), hold (to 28%), erase (to 32%), idle for the rest of the cycle
+        css.append(
+            f"@keyframes ty{i}{{0%{{width:0}}8%{{width:{w}px}}28%{{width:{w}px}}32%{{width:0}}100%{{width:0}}}}"
+            f"@keyframes cr{i}{{0%{{opacity:0;transform:translateX(0)}}0.5%{{opacity:1}}8%{{transform:translateX({w}px)}}"
+            f"28%{{transform:translateX({w}px)}}32%{{transform:translateX(0);opacity:1}}33%{{opacity:0}}100%{{opacity:0}}}}"
+            f".r{i}{{animation:ty{i} {CYCLE}s steps(24,end) {delay}s infinite both}}"
+            f".c{i}{{animation:cr{i} {CYCLE}s steps(24,end) {delay}s infinite both}}"
+        )
+        first = w if i == 0 else 0  # static fallback shows the first phrase only
+        typed.append(
+            f'<clipPath id="k{i}"><rect class="r{i}" x="94" y="214" width="{first}" height="30"/></clipPath>'
+            f'<text clip-path="url(#k{i})" x="94" y="234" font-family="{MONO}" font-size="18" fill="#8AB1F3" '
+            f'textLength="{w}" lengthAdjust="spacing">{escape(text)}</text>'
+            f'<rect class="c{i}" x="94" y="217" width="2" height="22" fill="#4F8EF7" opacity="0"/>'
+        )
     return f"""<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="t d">
   <title id="t">Lewis Abuga Bosire</title>
   <desc id="d">Software Engineer | Full-Stack Development | Business Systems</desc>
+  <style>
+    @keyframes drift{{from{{transform:translateY(0)}}to{{transform:translateY(-7px)}}}}
+    @keyframes breathe{{from{{opacity:0.45}}to{{opacity:1}}}}
+    .g{{animation:breathe 7s ease-in-out infinite alternate}}
+    .s0{{animation:drift 8s ease-in-out infinite alternate}}
+    .s1{{animation:drift 8s ease-in-out -2.5s infinite alternate}}
+    .s2{{animation:drift 8s ease-in-out -5s infinite alternate}}
+    {"".join(css)}
+    @media (prefers-reduced-motion: reduce){{*{{animation:none !important}}}}
+  </style>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="{NAVY}"/>
       <stop offset="1" stop-color="#14213D"/>
     </linearGradient>
-    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="{NAVY}" stop-opacity="1"/>
-      <stop offset="0.55" stop-color="{NAVY}" stop-opacity="0.0"/>
-    </linearGradient>
   </defs>
   <rect width="1200" height="300" rx="14" fill="url(#bg)"/>
   <rect x="0.5" y="0.5" width="1199" height="299" rx="13.5" fill="none" stroke="{BORDER}"/>
-  <g>{grid}</g>
-  <g transform="translate(900 60)" fill="none" stroke="#4F8EF7">
-    <rect x="0" y="0" width="180" height="180" rx="10" stroke-opacity="0.9" stroke-width="1.5"/>
-    <rect x="30" y="30" width="180" height="180" rx="10" stroke-opacity="0.45"/>
-    <rect x="60" y="60" width="180" height="180" rx="10" stroke-opacity="0.2"/>
+  <g class="g">{grid}</g>
+  <g fill="none" stroke="#4F8EF7">
+    <rect class="s0" x="900" y="60" width="180" height="180" rx="10" stroke-opacity="0.9" stroke-width="1.5"/>
+    <rect class="s1" x="930" y="90" width="180" height="180" rx="10" stroke-opacity="0.45"/>
+    <rect class="s2" x="960" y="120" width="180" height="180" rx="10" stroke-opacity="0.2"/>
   </g>
-  <rect x="64" y="86" width="44" height="3" rx="1.5" fill="#4F8EF7"/>
-  <text x="64" y="150" font-family="{FONT}" font-size="56" font-weight="600" fill="{WHITE}" letter-spacing="-1">Lewis Abuga Bosire</text>
-  <text x="64" y="196" font-family="{FONT}" font-size="21" fill="{MUTED}" letter-spacing="0.3" xml:space="preserve">Software Engineer<tspan fill="#4F8EF7">   |   </tspan>Full-Stack Development<tspan fill="#4F8EF7">   |   </tspan>Business Systems</text>
-  <text x="64" y="248" font-family="{FONT}" font-size="14" fill="{DIM}" letter-spacing="2">NAIROBI, KENYA</text>
+  <rect x="64" y="64" width="44" height="3" rx="1.5" fill="#4F8EF7"/>
+  <text x="122" y="71" font-family="{FONT}" font-size="12.5" fill="{DIM}" letter-spacing="2.5">NAIROBI, KENYA</text>
+  <text x="64" y="138" font-family="{FONT}" font-size="56" font-weight="600" fill="{WHITE}" letter-spacing="-1">Lewis Abuga Bosire</text>
+  <text x="64" y="182" font-family="{FONT}" font-size="21" fill="{MUTED}" letter-spacing="0.3" xml:space="preserve">Software Engineer<tspan fill="#4F8EF7">   |   </tspan>Full-Stack Development<tspan fill="#4F8EF7">   |   </tspan>Business Systems</text>
+  <text x="64" y="234" font-family="{MONO}" font-size="18" fill="#4F8EF7">&gt;</text>
+  {"".join(typed)}
 </svg>
 """
 
@@ -197,7 +229,7 @@ def placeholder(title: str, w: int = 430) -> str:
 def main() -> None:
     (ASSETS / "cards").mkdir(parents=True, exist_ok=True)
     (ASSETS / "generated").mkdir(parents=True, exist_ok=True)
-    for name, title, w in (("stats.svg", "GitHub activity", 430), ("languages.svg", "Language distribution", 430), ("activity.svg", "Contribution activity", 890)):
+    for name, title, w in (("stats.svg", "GitHub activity", 430), ("languages.svg", "Language distribution", 430), ("activity.svg", "Contribution activity", 890), ("latest.svg", "Latest work", 890), ("snake.svg", "Contribution snake", 890)):
         target = ASSETS / "generated" / name
         if not target.exists():  # never overwrite real generated metrics
             target.write_text(placeholder(title, w), encoding="utf-8")

@@ -16,7 +16,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: profile-metrics
+  group: profile-commits
   cancel-in-progress: false
 
 jobs:
@@ -38,7 +38,7 @@ jobs:
 
       - name: Commit if changed
         run: |
-          if git diff --quiet -- assets/generated; then
+          if [ -z "$(git status --porcelain -- assets/generated)" ]; then
             echo "No change in metrics; nothing to commit."
             exit 0
           fi
@@ -46,4 +46,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/generated
           git commit -m "chore: refresh profile metrics"
+          git pull --rebase origin main
           git push

@@ -1,0 +1,56 @@
+name: Contribution snake
+
+# Animates the real contribution calendar and stores it in assets/generated/.
+# Commits only when the calendar changes.
+on:
+  schedule:
+    - cron: "23 4 * * *" # daily, 04:23 UTC
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/frame_snake.py"
+      - ".github/workflows/snake.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-commits
+  cancel-in-progress: false
+
+jobs:
+  snake:
+    name: Generate contribution snake
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate snake animation
+        uses: Platane/snk/svg-only@v3
+        with:
+          github_user_name: ${{ github.repository_owner }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          outputs: |
+            dist/snake.svg?color_snake=#4F8EF7&color_dots=#16213B,#1E3A6B,#2B5BA8,#4F8EF7,#8AB1F3
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Apply card frame
+        run: python scripts/frame_snake.py dist/snake.svg assets/generated/snake.svg
+
+      - name: Commit if changed
+        run: |
+          if [ -z "$(git status --porcelain -- assets/generated)" ]; then
+            echo "Snake unchanged; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/generated
+          git commit -m "chore: refresh contribution snake"
+          git pull --rebase origin main
+          git push

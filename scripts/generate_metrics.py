@@ -45,6 +45,13 @@ query($login: String!) {
         }
       }
     }
+    latest: repositories(first: 8, ownerAffiliations: OWNER, privacy: PUBLIC, isFork: false,
+                         orderBy: {field: PUSHED_AT, direction: DESC}) {
+      nodes {
+        name
+        defaultBranchRef { target { ... on Commit { messageHeadline committedDate } } }
+      }
+    }
     contributionsCollection {
       totalCommitContributions
       totalPullRequestContributions
@@ -96,7 +103,16 @@ def summarise(user: dict) -> dict:
             continue  # today may not have activity yet; do not break the streak
         else:
             break
+    latest = []
+    for r in user.get("latest", {}).get("nodes", []):
+        target = (r.get("defaultBranchRef") or {}).get("target") or {}
+        if r["name"] == LOGIN or not target.get("messageHeadline"):
+            continue
+        latest.append({"repo": r["name"], "message": target["messageHeadline"],
+                       "date": target["committedDate"][:10]})
+    latest.sort(key=lambda x: x["date"], reverse=True)
     return {
+        "latest": latest[:5],
         "weekly": weekly,
         "current_streak": current,
         "longest_streak": longest,
@@ -203,6 +219,33 @@ def activity_svg(s: dict) -> str:
         f'y="{h-18}"', f'y="{h-18}" opacity="0"')
 
 
+def _short(text: str, limit: int = 64) -> str:
+    text = " ".join(text.split())
+    return text if len(text) <= limit else text[: limit - 3].rstrip() + "..."
+
+
+def _date(iso: str) -> str:
+    y, m, d = iso.split("-")
+    months = "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split()
+    return f"{int(d)} {months[int(m) - 1]} {y}"
+
+
+def latest_svg(s: dict) -> str:
+    w = 890
+    rows = []
+    for i, item in enumerate(s["latest"]):
+        y = 92 + i * 38
+        rows.append(
+            f'  <line x1="28" y1="{y - 24}" x2="{w - 28}" y2="{y - 24}" stroke="{BORDER}"/>\n'
+            f'  <text x="28" y="{y}" font-family="{FONT}" font-size="14.5" font-weight="600" fill="{WHITE}">{escape(item["repo"])}</text>\n'
+            f'  <text x="250" y="{y}" font-family="{FONT}" font-size="13.5" fill="{MUTED}">{escape(_short(item["message"]))}</text>\n'
+            f'  <text x="{w - 28}" y="{y}" font-family="{FONT}" font-size="12.5" fill="{DIM}" text-anchor="end">{_date(item["date"])}</text>'
+        )
+    h = max(150, 92 + (len(s["latest"]) - 1) * 38 + 46)
+    svg = frame(w, h, "Latest work", "\n".join(rows), "Latest commits across public repositories of " + LOGIN)
+    return svg.replace("Public repositories and public activity only", "Most recent commit per public repository")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--fixture", help="JSON file shaped like the API user object (layout testing only)")
@@ -228,7 +271,9 @@ def main() -> int:
     (out / "stats.svg").write_text(stats_svg(summary), encoding="utf-8")
     (out / "languages.svg").write_text(languages_svg(summary), encoding="utf-8")
     (out / "activity.svg").write_text(activity_svg(summary), encoding="utf-8")
-    print(f"Wrote stats.svg, languages.svg and activity.svg to {out}")
+    if summary["latest"]:  # keep the previous card if the feed comes back empty
+        (out / "latest.svg").write_text(latest_svg(summary), encoding="utf-8")
+    print(f"Wrote metrics cards to {out}")
     return 0
 
 
