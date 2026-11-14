@@ -5,7 +5,7 @@
   <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#4F8EF7" stop-opacity="0.35"/><stop offset="1" stop-color="#4F8EF7" stop-opacity="0"/>
   </linearGradient></defs>
-  <text x="28" y="84" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="28" font-weight="600" fill="#F1F5F9">4</text>
+  <text x="28" y="84" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="28" font-weight="600" fill="#F1F5F9">0</text>
   <text x="28" y="104" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" fill="#94A3B8">Current streak, days</text>
   <text x="318" y="84" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="28" font-weight="600" fill="#F1F5F9">11</text>
   <text x="318" y="104" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12.5" fill="#94A3B8">Longest streak, last 12 months</text>
